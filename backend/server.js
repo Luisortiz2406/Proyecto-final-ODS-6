@@ -1,0 +1,72 @@
+const express = require("express");
+const mysql = require("mysql2");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// 🔗 Conexión MySQL
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "agua_smart"
+});
+
+db.connect(err => {
+  if (err) {
+    console.log("❌ Error conexión");
+  } else {
+    console.log("✅ Conectado a MySQL");
+  }
+});
+
+//  REGISTRO
+app.post("/registro", (req, res) => {
+  const { usuario, email, password, departamento, municipio } = req.body;
+  const sql = "INSERT INTO usuarios (usuario, email, password, departamento, municipio) VALUES (?, ?, ?, ?, ?)";
+
+  db.query(sql, [usuario, email, password, departamento, municipio], (err, result) => {
+    if (err) return res.send(err);
+    res.json({ message: "Registro exitoso" });
+  });
+});
+
+//  LOGIN
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  const sql = "SELECT * FROM usuarios WHERE email=? AND password=?";
+
+  db.query(sql, [email, password], (err, result) => {
+    if (err) return res.send(err);
+
+    if (result.length > 0) {
+      const usuario = result[0];
+
+      res.json({
+        success: true,
+        usuario: usuario.usuario,
+        departamento: usuario.departamento,
+        municipio: usuario.municipio
+      });
+
+    } else {
+      res.json({ success: false });
+    }
+  });
+});
+
+//  USUARIOS
+app.get("/usuarios", (req, res) => {
+  db.query("SELECT * FROM usuarios", (err, result) => {
+    if (err) return res.send(err);
+    res.json(result);
+  });
+});
+
+// Servidor
+app.listen(3000, () => {
+  console.log("Servidor en http://localhost:3000");
+});

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="login-wrapper"> 
+
+<div class="container">
+
+  <!-- LEFT SIDE (IMAGEN) -->
+  <div class="right"></div>
+
+  <!-- RIGHT SIDE (FORMULARIO) -->
+  <div class="left">
+    <center><h1>Crear Cuenta</h1></center>
+    <p class="subtitle">Únete a Agua Smart</p>
+
+    <form>
+      <input type="text" id="usuario" placeholder="Usuario" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+
+      <div class="select-container">
+        <select id="departamento" required>
+          <option value="" disabled selected>Selecciona un departamento</option>
+        </select>
+      </div>
+
+      <div class="select-container">
+        <select id="municipio" required>
+          <option value="" disabled selected>Selecciona un municipio</option>
+        </select>
+      </div>
+
+      <button type="submit">Registrarse</button>
+
+      <div class="extra-options">
+        <span>¿Ya tienes cuenta?</span>
+        <a href="login.html" class="register-link">Inicia sesión</a>
+      </div>
+    </form>
+  </div>
+
+</div>
+</div>
+
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+//departamentos
+fetch("https://api-colombia.com/api/v1/Department")
+  .then(res => res.json())
+  .then(data => {
+    const departamento = document.getElementById("departamento");
+
+    data.forEach(dep => {
+      let option = document.createElement("option");
+      option.value = dep.id;
+      option.textContent = dep.name;
+      departamento.appendChild(option);
+    });
+  });
+
+//municipios
+document.getElementById("departamento").addEventListener("change", function () {
+  const municipio = document.getElementById("municipio");
+
+  municipio.innerHTML = '<option value="">Selecciona un municipio</option>';
+
+  fetch(`https://api-colombia.com/api/v1/Department/${this.value}/cities`)
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(city => {
+        let option = document.createElement("option");
+        option.value = city.id;
+        option.textContent = city.name;
+        municipio.appendChild(option);
+      });
+    });
+
+  this.classList.add("seleccionado");
+});
+
+document.getElementById("municipio").addEventListener("change", function () {
+  if (this.value !== "") {
+    this.classList.add("seleccionado");
+  }
+});
+
+const form = document.querySelector("form");
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const usuario = document.getElementById("usuario").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  // Validar contraseña
+  const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+  if (!regexPass.test(password)) {
+    Swal.fire("Contraseña insegura");
+    return;
+  }
+
+  //  Validar correo
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email)) {
+    Swal.fire("Correo inválido");
+    return;
+  }
+
+  const dominiosValidos = ["gmail.com","hotmail.com","outlook.com","yahoo.com"];
+  const dominio = email.split("@")[1];
+
+  if (!dominiosValidos.includes(dominio)) {
+    Swal.fire("Usa un correo válido (gmail, outlook, etc.)");
+    return;
+  }
+
+// Enviar al backend
+const departamentoSelect = document.getElementById("departamento");
+const municipioSelect = document.getElementById("municipio");
+
+//  obtener valores seguros
+const departamento = departamentoSelect.options[departamentoSelect.selectedIndex]?.text;
+const municipio = municipioSelect.options[municipioSelect.selectedIndex]?.text;
+
+console.log("Departamento:", departamento);
+console.log("Municipio:", municipio);
+
+//  VALIDACIÓN
+if (!departamento || departamento === "Selecciona un departamento") {
+  Swal.fire("Selecciona un departamento");
+  return;
+}
+
+if (!municipio || municipio === "Selecciona un municipio") {
+  Swal.fire("Selecciona un municipio");
+  return;
+}
+fetch("http://localhost:3000/registro", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    usuario: usuario,
+    email: email,
+    password: password,
+    departamento: departamento,
+    municipio: municipio
+  })
+})
+.then(res => res.json())
+
+.then(data => {
+
+  // 🚫 SI EL BACKEND ENVÍA ERROR
+  if (data.error) {
+    Swal.fire({
+      icon: "error",
+      title: data.error,
+      confirmButtonColor: "#b11226"
+    });
+    return;
+  }
+
+  Swal.fire({
+    icon: "success",
+    title: "Registro exitoso",
+    text: "Ahora inicia sesión",
+    confirmButtonColor: "#7faec9"
+  }).then(() => {
+    window.location.href = "login.html";
+  });
+
+})
+.catch(error => {
+  console.error(error);
+
+  Swal.fire({
+    icon: "error",
+    title: "Error del servidor",
+    text: "No se pudo conectar con el backend"
+  });
+});
+
+});
+</script>
+
+</body>
+</html>

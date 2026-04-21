@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar Sesión</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="login-wrapper"> 
+
+<div class="container">
+  
+  <!-- LEFT SIDE -->
+  <div class="left">
+    <center><h1>Bienvenido Agua Smart</h1></center>
+    <p class="subtitle">El agua lo conecta todo</p>
+
+    <form id="loginForm">
+
+  <div class="input-group">
+    <i class="fa fa-envelope"></i>
+    <input type="email" id="email" placeholder="Email" required>
+  </div>
+
+  <div class="input-group">
+    <i class="fa fa-lock"></i>
+    <input type="password" id="password" placeholder="Contraseña" required>
+    <i class="fa fa-eye toggle-password" id="togglePassword"></i>
+  </div>
+
+  <button type="submit">Iniciar Sesión</button>
+
+  <div class="forgot">¿Olvidaste tu contraseña?</div>
+
+  <div class="extra-options">
+    <span>¿No tienes cuenta?</span>
+    <a href="registro.html" class="register-link">Regístrate</a>
+  </div>
+
+</form>
+  </div> 
+
+  <!-- RIGHT SIDE -->
+  <div class="right">
+    <div class="overlay-text">
+    </div>
+  </div>
+
+</div>
+</div> 
+<script>
+const togglePassword = document.getElementById("togglePassword");
+const password = document.getElementById("password");
+
+// Mostrar / ocultar contraseña
+togglePassword.addEventListener("click", function () {
+  const type = password.type === "password" ? "text" : "password";
+  password.type = type;
+
+  this.classList.toggle("fa-eye");
+  this.classList.toggle("fa-eye-slash");
+});
+
+//  LOGIN REAL
+const form = document.getElementById("loginForm");
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  // VALIDACIÓN BÁSICA
+  if(email === "" || password === ""){
+    Swal.fire("Error", "Completa todos los campos", "error");
+    return;
+  }
+
+  // PETICIÓN AL BACKEND
+  fetch("http://localhost:3000/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+
+    if(data.success){
+      
+      //guardar usuario
+      localStorage.setItem("usuario", data.usuario || data.user || data.nombre || "Usuario");
+      localStorage.setItem("email", email);
+      localStorage.setItem("departamento", data.departamento);
+      localStorage.setItem("municipio", data.municipio);
+
+      Swal.fire({
+        icon: "success",
+        title: "Bienvenido",
+        text: data.usuario
+      }).then(() => {
+        window.location.href = "inicio.html";
+      });
+
+    } else {
+      Swal.fire("Error", "Credenciales incorrectas", "error");
+    }
+
+  })
+  .catch(error => {
+    console.error(error);
+    Swal.fire("Error de conexión");
+  });
+
+});
+</script>
+</body>
+</html>
