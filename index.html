@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Agua Smart</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar">
+  <div class="nav-left">
+    <img src="img/ods6.png">
+    <span>Agua Smart</span>
+  </div>
+  
+   <div class="nav-center">
+  <div onclick="recargarPagina()">
+    <img src="img/casa.png" class="icon">
+    <span>Inicio</span>
+  </div>
+</div>
+
+<div class="nav-right">
+  <div onclick="cambiarTamano()">
+    <img src="img/tamano.png" class="icon">
+    <span>Tamaño</span>
+  </div>
+
+  <div onclick="toggleContraste()">
+    <img src="img/contraste.png" class="icon">
+    <span>Contraste</span>
+  </div>
+
+  <div class="usuario">
+    <img src="img/usuario.png" class="icon">
+    <button class="btn-login-home" onclick="window.location.href='login.html'">
+      Iniciar Sesión
+    </button>
+  </div>
+</div>
+</header>
+
+<section class="hero">
+  <h1>GESTIONA EL AGUA DE<br>FORMA INTELIGENTE</h1>
+  <p>ODS 6: Agua Limpia y Saneamiento</p>
+  <a href="login.html" class="btn">Comenzar Ahora →</a>
+</section>
+
+<section class="tabs">
+
+  <!-- BOTONES -->
+  <div class="tab-buttons">
+    <div class="tab active" data-tab="edu">Educación y Conciencia</div>
+    <div class="tab" data-tab="datos">Análisis de Datos</div>
+    <div class="tab" data-tab="impacto">Impacto Comunitario</div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="tab-content">
+
+    <div class="content active" id="edu">
+      <div class="info">
+        <div class="text">
+          <h2>EDUCACIÓN Y CONCIENCIA</h2>
+          <p>Promovemos el uso responsable del agua a través de juegos educativos</p>
+        </div>
+        <div class="image">
+          <img src="img/educación.png">
+        </div>
+      </div>
+    </div>
+
+    <div class="content" id="datos">
+      <div class="info">
+        <div class="text">
+          <h2>ANÁLISIS DE DATOS</h2>
+          <p>Monitoreamos el consumo para identificar áreas de mejora</p>
+        </div>
+        <div class="image">
+          <img src="img/datosc.png">
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPACTO -->
+    <div class="content" id="impacto">
+      <div class="info">
+        <div class="text">
+          <h2>IMPACTO COMUNITARIO</h2>
+          <p>Creamos conciencia colectiva para un cambio sostenible</p>
+        </div>
+        <div class="image">
+          <img src="img/comunidad.png">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ONDA COMPLETA -->
+<div class="wave-container">
+  <!-- CAPA 1 (fondo oscuro) -->
+  <svg viewBox="0 0 1440 320" class="wave1">
+    <path fill="#b11226"
+      d="M0,200C150,150,300,250,450,220C600,190,750,120,900,140C1050,160,1200,240,1440,180L1440,320L0,320Z">
+    </path>
+  </svg>
+
+  <!-- CAPA 2 (media) -->
+  <svg viewBox="0 0 1440 320" class="wave2">
+    <path fill="#3fa1bf"
+      d="M0,180C150,130,300,210,450,200C600,190,750,100,900,120C1050,140,1200,200,1440,160L1440,320L0,320Z">
+    </path>
+  </svg>
+
+  <!-- CAPA 3 (clara arriba) -->
+  <svg viewBox="0 0 1440 320" class="wave3">
+    <path fill="#0c4e83"
+      d="M0,160C150,120,300,180,450,180C600,180,750,80,900,100C1050,120,1200,160,1440,140L1440,320L0,320Z">
+    </path>
+    <path fill="#3a6ea5"
+    d="M0,160C150,120,300,180,450,180C600,180,750,80,900,100C1050,120,1200,160,1440,140L1440,320L0,320Z">
+  </path>
+
+  <image 
+    href="img/ods6.png" 
+    x="50" 
+    y="250" 
+    width="100" 
+    height="100" />
+ 
+  <text x="10%" y="290" fill="#ffffff" font-size="20" font-weight="bold">
+    Agua Smart
+  </text>
+
+  <text x="10%" y="310" fill="#ffffff" font-size="13">
+    Plataforma inteligente del agua
+  </text>
+
+  <text x="50%" y="290" fill="#ffffff" font-size="18" text-anchor="middle">
+    ODS 6
+  </text>
+
+  <text x="50%" y="310" fill="#ffffff" font-size="13" text-anchor="middle">
+    Agua Limpia y Saneamiento
+  </text>
+
+  <text x="90%" y="290" fill="#ffffff" font-size="18" text-anchor="end">
+    Contacto
+  </text>
+
+  <text x="90%" y="310" fill="#ffffff" font-size="13" text-anchor="end">
+    info@aguasmart.com
+  </text>
+  </svg>
+</div>
+
+<div class="footer-bottom">
+
+  <hr>
+
+  <p class="copy">© 2026 Agua Smart. Todos los derechos reservados.</p>
+
+</div>
+<script>
+const tabs = document.querySelectorAll(".tab");
+const contents = document.querySelectorAll(".content");
+
+tabs.forEach(tab => {
+  tab.addEventListener("mouseenter", () => {
+
+    // quitar activo
+    tabs.forEach(t => t.classList.remove("active"));
+    contents.forEach(c => c.classList.remove("active"));
+
+    // activar actual
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.tab).classList.add("active");
+  });
+});
+</script>
+
+<script>
+function recargarPagina() {
+  location.reload();
+}
+
+function toggleContraste() {
+  document.body.classList.toggle("modo-oscuro");
+}
+
+let tamaño = 16;
+
+function cambiarTamano() {
+  tamaño += 2;
+
+  if (tamaño > 24) {
+    tamaño = 16;
+  }
+
+  document.body.style.fontSize = tamaño + "px";
+}
+</script>
+
+<script>
+/* ACTIVAR/DESACTIVAR */
+function toggleContraste() {
+  document.body.classList.toggle("modo-oscuro");
+
+  // guardar estado
+  if (document.body.classList.contains("modo-oscuro")) {
+    localStorage.setItem("modo", "oscuro");
+  } else {
+    localStorage.setItem("modo", "claro");
+  }
+}
+
+/* CARGAR ESTADO */
+window.onload = function() {
+  if (localStorage.getItem("modo") === "oscuro") {
+    document.body.classList.add("modo-oscuro");
+  }
+}
+</script>
+</body>
+</html>
