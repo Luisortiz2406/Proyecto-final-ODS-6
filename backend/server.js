@@ -4,10 +4,12 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors({
-  origin: "https://proyecto-final-ods-6-1zwh.vercel.app/",
+  origin: "https://proyecto-final-ods-6-1zwh.vercel.app",
   methods: ["GET", "POST"],
   credentials: true
 }));
+
+app.options("*", cors());
 
 app.use(express.json());
 
