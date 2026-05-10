@@ -66,7 +66,10 @@ app.post("/login", (req, res) => {
 //  USUARIOS
 app.get("/usuarios", (req, res) => {
   db.query("SELECT * FROM usuarios", (err, result) => {
-    if (err) return res.send(err);
+    if (err) {
+  console.log(err);
+  return res.status(500).json({ error: "Error en base de datos" });
+}
     res.json(result);
   });
 });
