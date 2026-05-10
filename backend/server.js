@@ -13,7 +13,7 @@ app.use(express.json());
 
 // 🔗 Conexión MySQL
 const db = mysql.createConnection({
-  host: "mysql.railway.internal",
+  host: "mysql://root:YkvxEisAymqSNDplOJSNruMAeOqbSJzd@viaduct.proxy.rlwy.net:42226/railway",
   user: "root",
   password: "YkvxEisAymqSNDplOJSNruMAeOqbSJzd",
   database: "railway",
