@@ -22,6 +22,10 @@ db.connect(err => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("Backend funcionando en Render ");
+});
+
 //  REGISTRO
 app.post("/registro", (req, res) => {
   const { usuario, email, password, departamento, municipio } = req.body;
@@ -67,6 +71,8 @@ app.get("/usuarios", (req, res) => {
 });
 
 // Servidor
-app.listen(3000, () => {
-  console.log("Servidor en http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
