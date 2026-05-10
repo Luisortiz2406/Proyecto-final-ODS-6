@@ -13,10 +13,11 @@ app.use(express.json());
 
 // 🔗 Conexión MySQL
 const db = mysql.createConnection({
-  host: "localhost",
+  host: "mysql.railway.internal",
   user: "root",
-  password: "",
-  database: "agua_smart"
+  password: "YkvxEisAymqSNDplOJSNruMAeOqbSJzd",
+  database: "railway",
+  port: 3306
 });
 
 db.connect(err => {
