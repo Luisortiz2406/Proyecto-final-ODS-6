@@ -146,7 +146,7 @@ if (!municipio || municipio === "Selecciona un municipio") {
   Swal.fire("Selecciona un municipio");
   return;
 }
-fetch("http://localhost:3000/registro", {
+fetch("https://tu-backend.onrender.com/registro", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
